@@ -5,6 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import datetime
 from matplotlib import style
+import pickle
 
 style.use('ggplot')
 from sklearn import preprocessing, cross_validation, svm
@@ -35,12 +36,16 @@ X_laterly = X[-forecast_out]
 
 df.dropna(inplace=True)
 y = np.array(df['label'])
-y = np.array(df['label'])
 X_train, X_test, y_train, y_test = cross_validation.train_test_split(X, y, test_size=0.33)
 
 classifier = LinearRegression()
 # classifier = svm.SVR(kernel='poly')
 classifier.fit(X_train, y_train)
+
+with open('linearregression.pickle','wb') as f:
+    pickle.dump(classifier,f)
+    pickle_in = open('linearregression.pickle','rb')
+    classifier = pickle.load(pickle_in)
 
 accuracy = classifier.score(X_test, y_test)
 
